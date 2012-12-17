@@ -1,0 +1,52 @@
+BEFORE
+- if @options[:template][:format].html
+  HTML
+- else
+  NOT HTML
+=@options[:template][:format].format
+= widget_div do
+  -if @model
+
+    -table_name="#{@model.name}Datatable"
+
+    -if @options[:widget][:render_as_javascript]
+      -# wrap the haml output html in a jquery append command, being sure to avoid " in haml output
+      -if @options[:widget][:render_as_javascript]==:with_tags
+        <script type="text/javascript" id="#{table_name}_script">
+        preInit(function() {
+      $("##{table_name}_script").parent().append("
+
+    %table{:id=>table_name,:class=>"display"}<>
+      %thead<>
+        %tr<>
+          -@model.columns_hash.each_pair do |name,column|
+            %th<>=name
+      %tbody<>
+        -if !@options[:plugin][:sAjaxSource] and !@options[:plugin][:aaData]
+          -@model.find(:all).each do |item|
+            %tr<>
+              -item.attributes.each do |key,value|
+                %td<> =value
+      -if @options[:template][:footer]
+        %tfoot<>
+          %tr<>
+            -@model.columns_hash.each_pair do |name,column|
+              %th<>=name
+
+    -# end jquery append wrap
+    -if @options[:widget][:render_as_javascript]
+      ");
+      -if @options[:widget][:render_as_javascript]==:with_tags
+        });
+        </script>
+
+    :javascript
+      postInit(function() {
+        $("##{table_name}").dataTable(#{@options[:plugin].to_json});
+      });
+  -else
+    %h3
+      Data model undefined for #{__FILE__}
+  sAjaxSource=
+  =@options[:plugin][:sAjaxSource]
+AFTER

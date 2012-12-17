@@ -3,7 +3,7 @@ class CreateItems < ActiveRecord::Migration
     create_table :items do |t|
       t.string :name
       t.integer :value
-      t.datatime :when
+      t.datetime :when
 
       t.timestamps
     end

@@ -1,0 +1,24 @@
+-if @model
+
+  %table{:id=>@options[:template][:id],:class=>"display"}<>
+    %thead<>
+      %tr<>
+        -@model.columns_hash.each_pair do |name,column|
+          %th<>=name
+    %tbody<>
+      -if !@options[:plugin][:sAjaxSource] and !@options[:plugin][:aaData]
+        -@model.find(:all).each do |item|
+          %tr<>
+            -item.attributes.each do |key,value|
+              %td<> =value
+    -if @options[:template][:footer]
+      %tfoot<>
+        %tr<>
+          -@model.columns_hash.each_pair do |name,column|
+            %th<>=name
+
+  -if !@options[:params][:format]
+    :javascript
+      postInit(function() {
+        #{@init_datatable_js}
+      });

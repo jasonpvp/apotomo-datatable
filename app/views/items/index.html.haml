@@ -1,0 +1,16 @@
+%h1="Apotomo Datatable Example"
+
+%h2="Rendered as HTML"
+=render_widget :items_datatable,:display,:plugin=>{:sScrollY=>100,:bScrollCollapse=>true},:template=>{:id=>'html_datatable'}
+
+%h2="Rendered via AJAX"
+
+%div#parentDiv2
+  =link_to "Create table from options set in the URL", items_path+'.js?template[parent]=parentDiv2&plugin[sScrollY]=100', :remote=>true
+
+:javascript
+  var options={template: {parent: 'parentDiv1'}, plugin: {sScrollY: 200}};
+
+%div#parentDiv1
+  =link_to "Create table from options defined in javascript tag", items_path+'.js?template[plugin_options]=options&template[parent]=parentDiv1', :remote=>true
+
