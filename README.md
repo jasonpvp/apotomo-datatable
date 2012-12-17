@@ -1,19 +1,20 @@
-= Apotomo-Datatable
-  (Soon to be) a Rails Gem for dead simple use of jQuery Datatables
+# Apotomo-Datatable
+  (Soon to be) a Rails Gem for using of jQuery Datatables with extremely minimal configuration
 
   Built on the Apotomo widget gem
 
   Apotomo-Datatables may be rendered within a view (like a partial) or as javascipt for AJAX implementation
 
-== Usage
+## Usage
 
-  The following exmaple demonstrates creating a datatable as a rendered widget (apotomo cell partial) from within a view,
-  and using AJAX with two different methods for passing plugin options.
+  The following exmaple demonstrates creating a datatable as a rendered widget (apotomo cell partial)
+  from within a view, and using AJAX with two different methods for passing plugin options.
 
-=== Gemfile
+### Gemfile
     gem 'apotomo-datatables'
+    gem 'haml'
 
-=== items_controller.rb
+### items_controller.rb
     root << items_datatable=widget('apotomo/datatable',:items_datatable,
       :widget=>{},   #widget options
       :template=>{:footer=>true}, #template options
@@ -27,13 +28,13 @@
       end
     end
 
-    # If apotomo_datatable_datasource is defined, Apotomo::DatatableWidget.datasource will use this to populate its data collection
-    # results returned from here are encapsulated in a hash expected by jquery datatables
+    # If apotomo_datatable_datasource is defined, Apotomo::DatatableWidget.datasource will use this to populate
+    # its data collection results returned from here are encapsulated in a hash expected by jquery datatables
     def apotomo_datatable_datasource(filter)
       Item.find(:all,filter)
     end
 
-=== index.html.haml
+### index.html.haml
     %h1="Apotomo Datatable Example"
 
     %h2="Rendered as HTML"
@@ -51,11 +52,11 @@
     %div#parentDiv2
       =link_to "Create table from options defined in javascript variable", items_path+'.js?template[plugin_options]=plugin_options&template[parent]=parentDiv2&template[id]=datatable_2', :remote=>true
 
-=== index.js.haml
+### index.js.haml
     =render_widget :items_datatable,:display,:widget=>{},:template=>{:footer=>true},:plugin=>{:sScrollY=>150}
 
 
-== Options
+## Options
 
   The @options hash includes sub-hashes for the widget, templates and client-side plugin
     @options={:widget=>{...}, :template=>{...}, :plugin=>{...}}
