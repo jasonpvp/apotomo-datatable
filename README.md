@@ -16,7 +16,7 @@
 
 ### items_controller.rb
     root << items_datatable=widget('apotomo/datatable',:items_datatable,
-      :widget=>{},   #widget options
+      :widget=>{},   #widget options (the model is derived from the controller name by default, but may be passed here as :model=>Model)
       :template=>{:footer=>true}, #template options
       :plugin=>{:sScrollY=>150}    #plugin options
     )
@@ -28,6 +28,7 @@
       end
     end
 
+    # By defaultathe widget will query the model on its own
     # If apotomo_datatable_datasource is defined, Apotomo::DatatableWidget.datasource will use this to populate
     # its data collection results returned from here are encapsulated in a hash expected by jquery datatables
     def apotomo_datatable_datasource(filter)
@@ -63,8 +64,7 @@
 
   Default options are generated and merged with controller-provided options in Apotomo::DatatableWidget.set_options
 
-  Default options may be overridden from the controller, view, by URL parameters and by a client-side javascript hash, as seen in the example above,  
-  with the client-side javascript hash taking the highest precedence
+  Default options may be overridden from the controller, view, by URL parameters and by a client-side javascript hash, as seen in the example above, with the client-side javascript hash taking the highest precedence
     client_side_options -> url_param_options -> view_options -> controller_options -> default_options
 
   URL parameters may only define template and plugin options. Defining widget options from the URL would present a security hole

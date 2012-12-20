@@ -1,0 +1,11 @@
+%tr<>
+  -@model.columns_hash.each_pair do |name,column|
+    %th<>
+      - section.each do |opt|
+        - case opt
+        - when :label
+          =name
+        - when :input
+          %input<>
+        - when :select
+          %select<>
