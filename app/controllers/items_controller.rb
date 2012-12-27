@@ -9,6 +9,7 @@ class ItemsController < ApplicationController
   end
 
   def index
+    @render_method = params[:render_method] ? params[:render_method] : 'html'
     respond_to do |format|
       format.html
       format.js {render :script=>true}

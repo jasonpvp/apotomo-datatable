@@ -1,3 +1,5 @@
 After do |scenario|
-#   save_and_open_page if scenario.failed?
+  if ENV['DEBUG']
+     save_and_open_page if scenario.failed?
+  end
 end

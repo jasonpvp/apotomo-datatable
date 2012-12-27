@@ -1,4 +1,3 @@
-#http://www.sarahmei.com/blog/2010/05/29/outside-in-bdd/
 Feature: Load Apotomo-Datatable widget
   In order to make UI development as easy as possible
   As a dev
@@ -6,7 +5,12 @@ Feature: Load Apotomo-Datatable widget
 
   @javascript
   Scenario: Load an Apotomo-Datatable with server-side processing
-    Given I visit the items page
+    When I visit the items page
     Then I should see "name" before "value"
-    Then I should see "Showing 1 to 10 of 100 entries"
+    And I should see "Showing 1 to 10 of 100 entries"
 
+#  @javascript
+#  Scenario: Load an Apotomo-Datatable via AJAX by clicking a link
+#    When I visit the items page
+#    And I click on link "Create from AJAX with URL params"
+#    Then I should see "Showing 1 to 100" after "Showing 1 to 100"
