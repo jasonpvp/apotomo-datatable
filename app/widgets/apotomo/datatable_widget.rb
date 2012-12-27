@@ -28,10 +28,17 @@ class Apotomo::DatatableWidget < Apotomo::Widget
 
   responds_to_event :data #Used by sAjaxSource plugin option
   responds_to_event :display
+  responds_to_event :test_evt, :with => :test_evt, :passing => :root
 
   after_initialize do
     ## set default options and those based on options provided in the has_widgets call in the controller
     set_options
+  end
+
+  def test_evt(event)
+    if @options[:widget][:controller].respond_to?(:apotomo_datatable_event)
+      @evt_test=@options[:widget][:controller].apotomo_datatable_event(event)
+    end
   end
 
   def display(options)
@@ -55,7 +62,8 @@ class Apotomo::DatatableWidget < Apotomo::Widget
 
 
     @init_datatable_js= "$(\"##{@options[:template][:id]}\").dataTable(#{datatable_options});"
-
+    @evt_test='empty'
+    self.fire :test_evt
     if @options[:params][:format]=='js'
       #TODO: escape double quotes and new lines
       @html=render_to_string :file => File.expand_path('../datatable/display_html', __FILE__)
@@ -69,16 +77,16 @@ class Apotomo::DatatableWidget < Apotomo::Widget
   def datatable_init_vars
   end
 
-  def head_foot(section)
-    render :locals=>{:section=>section}
+  def head_foot(options,section)
+    render :locals=>{:options=>options,:section=>section}
   end
 
   def data
     is_searching = (params[:sSearch] and params[:sSearch].length>0)
     @records=datasource
     @data={
-      :iTotalRecords=>@model.count,
-      :iTotalDisplayRecords=>is_searching ? @records.count : @model.count,
+      :iTotalRecords=>@options[:widget][:model].count,
+      :iTotalDisplayRecords=>is_searching ? @records.count : @options[:widget][:model].count,
       :aaData=>@records
     }
     render text: @data.to_json
@@ -90,16 +98,16 @@ class Apotomo::DatatableWidget < Apotomo::Widget
     filter={}
     is_searching = (params[:sSearch] and params[:sSearch].length>0)
     if is_searching
-      filter[:conditions]=[@model.column_names.join(' LIKE :sSearch OR ')+' LIKE :sSearch',{:sSearch=>"%#{params[:sSearch]}%"}]
+      filter[:conditions]=[@options[:widget][:model].column_names.join(' LIKE :sSearch OR ')+' LIKE :sSearch',{:sSearch=>"%#{params[:sSearch]}%"}]
     end
     if params[:iDisplayStart] and params[:iDisplayLength]
       filter[:limit]=params[:iDisplayLength]
       filter[:offset]=params[:iDisplayStart]
     end
-    if @controller.respond_to?('apotomo_datatable_datasource')
-      @records=@controller.apotomo_datatable_datasource(filter)
+    if @options[:widget][:controller].respond_to?('apotomo_datatable_datasource')
+      @records=@options[:widget][:controller].apotomo_datatable_datasource(filter)
     else
-      @records=@model.find(:all,filter)
+      @records=@options[:widget][:model].find(:all,filter)
     end
     return @records
   end
@@ -141,38 +149,44 @@ class Apotomo::DatatableWidget < Apotomo::Widget
 
 
 =end
-    @controller=parent_controller
-    if match=/(\w+?)sController/.match(@controller.class.name.to_s)
-      @controller_model_name=match[1]
+    controller=parent_controller
+    if match=/(\w+?)sController/.match(controller.class.name.to_s)
+      controller_model_name=match[1]
     end
 
     if options[:widget][:model]
       if options[:widget][:model].respond_to?("columns_hash")
-        @model=options[:widget][:model]
+        model=options[:widget][:model]
       end
-    elsif @controller_model_name
+    elsif controller_model_name
       #derive the model from the controller name
-      if defined?(@controller_model_name) && eval(@controller_model_name+'.respond_to?("columns_hash")')
-        @model=eval(@controller_model_name)
+      if defined?(controller_model_name) && eval(controller_model_name+'.respond_to?("columns_hash")')
+        model=eval(controller_model_name)
       end
     end
 
     aoColumns=[]
-    @model.column_names.each do |name|
+    model.column_names.each do |name|
       aoColumns.push({'mDataProp'=>name})
     end
 
     defaults={
       :widget=>{
+        :model=>model,
+        :controller=>controller
       },
       :template=>{
-        #The header and footer have the same options for parameters. Each may be a single value, an array or a hash
+        #The header and footer have the same set of options.
+        #Each may contain multiple rows. Each row may define an array of options for each cell
+        #:header=
+
+        #Each may be a single value, an array or a hash
         #If a single value or array, all columns are rendered with the provided options in order
         #If a hash, each key should match column field names. Each key-value is a value or array as above
         #single value or array options are: nil: ommited, label: label, input: input column filter, select: select column filter
-        :header=>[:label,:input], 
+        :header=>{:default=>:label,:name=>[:label,:input],:value=>[:label,:input]}, 
         :footer=>nil, 
-        :id=>"#{@model.name}Datatable"
+        :id=>"#{model.name}Datatable"
 
       },
       :plugin=>{
@@ -196,6 +210,8 @@ class Apotomo::DatatableWidget < Apotomo::Widget
         options[:plugin][:aaData]=records
       end
     end
+
+    @options[:widget][:datasource]=self.method(:datasource)
     # merge default options with options provided by the controller
     @options=defaults.deep_merge(options)
     @options[:params]=params

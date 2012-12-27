@@ -1,11 +1,21 @@
 %tr<>
-  -@model.columns_hash.each_pair do |name,column|
+  -options[:widget][:model].columns_hash.each_pair do |name,column|
     %th<>
-      - section.each do |opt|
+      - if options[:template][section].respond_to?(:each_pair)
+        - inputs=options[:template][section][name]
+        - unless inputs
+          - inputs=options[:template][section][:default]
+      - else
+        - inputs=options[:template][section]
+      - unless inputs.respond_to?(:each)
+        - inputs=[inputs]
+      - inputs.each do |opt|
         - case opt
         - when :label
           =name
         - when :input
-          %input<>
+          %br<>
+          %input{:onclick=>"event.stopPropagation();"}<>
         - when :select
-          %select<>
+          %br<>
+          %select{:onclick=>"event.stopPropagation();"}<>

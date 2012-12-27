@@ -1,11 +1,9 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+#Readaboutfixturesathttp: //api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
-one:
-  name: MyString
-  value: 1
-  when: 
+<% (1..100).each do |n| %>
+item<%=n %>:
+  name: item<%=n %>
+  value: <%=n %>
 
-two:
-  name: MyString
-  value: 1
-  when: 
+<% end %>
+

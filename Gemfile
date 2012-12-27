@@ -38,3 +38,16 @@ gem 'jquery-rails'
 
 # To use debugger
 # gem 'debugger'
+group :development, :test do
+  gem 'cucumber-rails', :require=>false
+  gem 'database_cleaner'
+  gem 'rspec-rails'
+  gem 'capybara','>=2.0.1'
+#  gem 'capybara-webkit', :git => 'https://github.com/thoughtbot/capybara-webkit.git'
+  gem "capybara-webkit"
+  gem 'debugger'
+  gem 'launchy'
+#  gem 'spork'
+#  gem 'fakeweb'
+#  gem 'selenium-webdriver'
+end
