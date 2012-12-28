@@ -3,8 +3,13 @@ end
 
 World(LoadApotomoDatatable)
 
-When /^I visit (the [^"]+ page)$/ do |page_name|
-  visit path_to(page_name)
+When /^I visit (the [^"]+ page)(\s+with\s+)?(.*)$/ do |page_name,with_params,params|
+  if with_params 
+    params=params.split(/\s*and\s*/).join('&')
+  end
+  url=path_to(page_name)+'?'+params
+  puts "visiting #{url}"
+  visit url
 end
 
 Then /^I should see "([^"]+)"$/ do |text|

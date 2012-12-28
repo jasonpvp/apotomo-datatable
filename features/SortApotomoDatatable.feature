@@ -5,7 +5,7 @@ Feature: Sort Apotomo-Datatable
 
   @javascript
   Scenario: Sort datatable without server-side processing
-    When I visit the items page
+    When I visit the items page with render_method=html
     Then I should see "Showing 1 to 10 of 100 entries"
     When I click on a div with class "DataTables_sort_wrapper" containing the text "value"
     Then I should see "item1" before "item2"
@@ -14,7 +14,7 @@ Feature: Sort Apotomo-Datatable
 
   @javascript
   Scenario: Sort datatable with server-side processing
-    When I visit the items page
+    When I visit the items page with plugin[sAjaxSource]=true
     Then I should see "Showing 1 to 10 of 100 entries"
     When I click on a div with class "DataTables_sort_wrapper" containing the text "value"
     Then I should see "item1" before "item2"

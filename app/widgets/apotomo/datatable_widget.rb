@@ -50,6 +50,8 @@ class Apotomo::DatatableWidget < Apotomo::Widget
     ## merge options from the URL params
     merge_param_options
 
+    process_boolean_options
+
     ## merge client-side plugin options
     datatable_options=@options[:plugin].to_json    
     if @options[:template][:plugin_options] 
@@ -165,9 +167,10 @@ class Apotomo::DatatableWidget < Apotomo::Widget
       end
     end
 
-    aoColumns=[]
+
+    @options[:plugin][:aoColumns]=[]
     model.column_names.each do |name|
-      aoColumns.push({'mDataProp'=>name})
+      @options[:plugin][:aoColumns].push({'mDataProp'=>name})
     end
 
     defaults={
@@ -194,6 +197,7 @@ class Apotomo::DatatableWidget < Apotomo::Widget
         :bJQueryUI=>true
       }
     }.with_indifferent_access
+=begin
     ## if options[:plugin][:sAjaxSource] is boolean or nil, derive default if true and delete option value from controller
     if !options[:plugin].has_key?(:sAjaxSource) || options[:plugin][:sAjaxSource]==true
       options[:plugin][:sAjaxSource]=url_for_event(:data)
@@ -210,7 +214,7 @@ class Apotomo::DatatableWidget < Apotomo::Widget
         options[:plugin][:aaData]=records
       end
     end
-
+=end
     @options[:widget][:datasource]=self.method(:datasource)
     # merge default options with options provided by the controller
     @options=defaults.deep_merge(options)
@@ -227,6 +231,47 @@ class Apotomo::DatatableWidget < Apotomo::Widget
     end
     if params[:plugin] && params[:plugin].respond_to?('each_pair')
       @options[:plugin]=@options[:plugin].deep_merge(params[:plugin])
+    end
+  end
+
+  def process_boolean_options
+    #some options accept boolean options to indicate the default value (true) or undefined (false or nil)
+    #these must be processed after options from all sources have been merged
+
+    ## if options[:plugin][:sAjaxSource] is boolean or nil, derive default if true and delete option value from controller
+    if @options[:plugin].has_key?(:sAjaxSource) 
+      sAjaxSource_bool=make_bool(@options[:plugin][:sAjaxSource])
+      if sAjaxSource_bool
+        @options[:plugin][:sAjaxSource]=url_for_event(:data)
+        unless @options[:plugin].has_key?(:bServerSide) 
+          @options[:plugin][:bServerSide]=true # User server-side processing: http://datatables.net/ref#bServerSide
+        end
+      else
+        @options[:plugin].delete(:sAjaxSource) #delete false or nil value to prevent invalid option from passing to plugin
+      end
+    end
+    ## profide column mapping if using ajax or aaData
+    ## provide aaData if requested
+    if sAjaxSource_bool || @options[:plugin][:aaData]==true
+      if @options[:plugin][:aaData]==true
+        records=datasource
+        @options[:plugin][:aaData]=records
+      end
+    else
+      @options[:plugin].delete(:aoColumns)
+    end
+    @options[:plugin][:sAjaxSourceBOOL]=sAjaxSource_bool
+  end
+
+  def make_bool(val)
+    if !!val==val 
+      return val 
+    else
+      if val.is_a?(String) && val.downcase=="true"
+        return true
+      else
+        return false
+      end
     end
   end
 end
