@@ -44,10 +44,10 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'capybara','>=2.0.1'
 #  gem 'capybara-webkit', :git => 'https://github.com/thoughtbot/capybara-webkit.git'
-  gem "capybara-webkit"
+#  gem "capybara-webkit"
   gem 'debugger'
   gem 'launchy'
 #  gem 'spork'
 #  gem 'fakeweb'
-#  gem 'selenium-webdriver'
+  gem 'selenium-webdriver'
 end

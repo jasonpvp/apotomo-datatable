@@ -74,3 +74,15 @@
   $.extend(@options[:widget].to_json,client_side_options) constitutes the arguments passed to the datatable initialization function. 
   See http://datatables.net/usage/options for options.  As such, any option specified in the jquery datatables API may be set in this sub hash
 
+## Current Status
+
+  The above examples will load a functional datatable, with sorting and global filtering working when plugin[bServerSide]!=true
+  Basic tests for loading and sorting are implemented.  Sorting tests fail when plugin[bServerSide]=true since that is not implemented yet
+  Template for column-based filters started, but not yet complete or functional
+
+## TODO
+
+  Implement server-side sorting and filtering
+  Expand feature tests
+  Implementing the other base features
+  Move on to implementing plugins

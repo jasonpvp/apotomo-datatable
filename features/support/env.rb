@@ -14,9 +14,9 @@ require 'ruby-debug'
 # prefer to use XPath just remove this line and adjust any selectors in your
 # steps to use the XPath syntax.
 Capybara.default_selector = :css
-Capybara.javascript_driver = :webkit
-Capybara.server_port = '8000'
-Capybara.app_host = 'http://localhost:8000'
+#Capybara.javascript_driver = :webkit
+#Capybara.server_port = '8000'
+#Capybara.app_host = 'http://localhost:8000'
 
 Before do
   ActiveRecord::Fixtures.reset_cache

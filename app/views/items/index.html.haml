@@ -1,17 +1,20 @@
 %h1="Apotomo Datatable Example"
 
+/ TODO: For the purposes of testing, use params to build the ajax URLs so those params will be applied to the generation of the datatable
 %h2="Rendered using #{@render_method}"
 -case @render_method
 -when 'html'
-  =render_widget :items_datatable,:display,:plugin=>{:sScrollY=>100,:bScrollCollapse=>true},:template=>{:id=>'html_datatable'}
+  %div
+    =link_to "Create table", '#'
+    =render_widget :items_datatable,:display,:plugin=>{:sScrollY=>100,:bScrollCollapse=>true},:template=>{:id=>'html_datatable'}
 
 -when 'ajax_url_params'
   %div#parentDiv1
-    =link_to "Create table from options set in the URL", items_path+'.js?template[parent]=parentDiv1&plugin[sScrollY]=100', :remote=>true, :title=>"Create from AJAX with URL params"
+    =link_to "Create table", items_path+'.js?template[parent]=parentDiv1&plugin[sScrollY]=100', :remote=>true, :title=>"Create table"
 
 -when 'ajax_js_params'
   :javascript
     var plugin_options={sScrollY: 50, iDisplayStart: 20};
   %div#parentDiv2
-    =link_to "Create table from options defined in javascript variable", items_path+'.js?template[plugin_options]=plugin_options&template[parent]=parentDiv2&template[id]=datatable_2', :remote=>true
+    =link_to "Create table", items_path+'.js?template[plugin_options]=plugin_options&template[parent]=parentDiv2&template[id]=datatable_2', :remote=>true, :title=>"Create table"
 
