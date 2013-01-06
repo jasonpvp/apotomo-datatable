@@ -5,7 +5,7 @@ Feature: Load Apotomo-Datatable widget
 
   @javascript
   Scenario: Load an Apotomo-Datatable with server-side processing
-    When I visit the items page
+    Given I am on the items page
     Then I should see "name" before "value"
     And I should see "Showing 1 to 10 of 100 entries"
 

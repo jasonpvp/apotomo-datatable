@@ -1,17 +1,20 @@
 # Apotomo-Datatable
-  (Soon to be) a Rails Gem for using of jQuery Datatables with extremely minimal configuration
+  (Soon to be) a Rails Gem for generating jQuery Datatables with extremely minimal configuration
 
   Built on the Apotomo widget gem
 
-  Apotomo-Datatables may be rendered within a view (like a partial) or as javascipt for AJAX implementation
+  Currently includes jQuery Datatables version 1.9.4
+
+  Datatables may be rendered within a view (like a partial) or as javascipt for AJAX implementation
 
 ## Usage
+  (Once it is gem-ified. In its current, early development state, this repository includes a complete rails app with apotomo-datatable installed under app/widgets)
 
   The following exmaple demonstrates creating a datatable as a rendered widget (apotomo cell partial)
   from within a view, and using AJAX with two different methods for passing plugin options.
 
 ### Gemfile
-    gem 'apotomo-datatables'
+    gem 'apotomo-datatable'
     gem 'haml'
 
 ### items_controller.rb

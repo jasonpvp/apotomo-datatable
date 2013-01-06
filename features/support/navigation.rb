@@ -16,12 +16,15 @@ module NavigationHelpers
 end
 
 World(NavigationHelpers)
+Given /^I am on a page with a datatable$/ do
+  step %{I am on the items page with #{$datatable_params}}
+end
 
-When /^I visit (the [^"]+ page)(\s+with\s+)?(.*)$/ do |page_name,with_params,params|
+Given /^I am on (the [^"]+ page)(\s+with\s+)?(.*)$/ do |page_name,with_params,params|
   if with_params
     params=params.split(/\s*and\s*/).join('&')
   end
-  url=path_to(page_name)+'?'+params
+  url=path_to(page_name)+'?'+params.to_s
   puts "visiting #{url}"
   visit url
 end
@@ -36,7 +39,15 @@ When /^I click on the link "([^"]+)"$/ do |link_text|
   sleep 2
 end
 
+And /^I have clicked the "([^"]+)" link$/ do |link_text|
+  click_link link_text
+  sleep 2
+end
+
 When /^I click on a div with class "([^"]+)" containing the text "([^"]+)"$/ do |class_name,text|
+  puts "click div.#{class_name} containing #{text}"
   find(:xpath,"//div[contains(@class,'#{class_name}') and contains(text(),'#{text}')]").click
   sleep 2
 end
+
+
