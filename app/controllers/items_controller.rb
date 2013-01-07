@@ -10,7 +10,7 @@ class ItemsController < ApplicationController
 
   def index
     @render_method = params[:render_method] ? params[:render_method].downcase : 'html'
-    if !['html','ajax_url_params','ajax_url_params'].include?(@render_method)
+    if !['html','ajax_url_params','ajax_js_params'].include?(@render_method)
       @render_method='html'
     end
     respond_to do |format|

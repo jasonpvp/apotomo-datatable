@@ -1,57 +1,28 @@
-#http://www.spritle.com/blogs/2009/09/22/integration-testing-with-webrat-rspec-and-authlogic/
-#http://reborg.tumblr.com/post/99813407/webrat-with-rspec-no-cucumber
-#https://gist.github.com/428105 capybara stuff
-#https://gist.github.com/1190475  setup example
-
 require 'spec_helper'
+require 'datatable_helpers'
 
-module Datatable_helpers
-  def load_datatable(params)
-    param_str=''
-    params.each { |k,v| param_str=param_str+"#{k}=#{v}&"}
-    url="#{items_path}?#{param_str}"
-#    puts "visit #{url}"
-    visit "#{url}"
-    click_link("Create table")
-    page.should have_content('Showing 1 to')    
-  end
-  def sort_datatable(by)
-#    puts "sort #{by[:column]} in #{by[:order].to_s} order"
-    header_div=find(:xpath,"//div[contains(text(),'#{by[:column]}')]")
-    header_div.click    #first click sorts ascending
-    if (by[:order]==:descending)
-      header_div.click  #second click sorts descending
-    end
-  end
-end
-
-describe 'Loading a datatable' do
+describe 'Rendering an apotomo-datatable widget' do
   include Datatable_helpers
 
-  items=[]
   num_items=50
   before(:all) do
-    (1..num_items).each {|n| items[n]=FactoryGirl.create(:item)}
+    (1..num_items).each {|n| FactoryGirl.create(:item)}
   end
 
   ['html','ajax_url_params','ajax_js_params'].each do |render_method|
-    [''].each do |serverSideProcessing| #passing true or false to this param (as intended) will currently result in ugly failures. Need to fix server-side processing response
-      params={:render_method=>render_method,'plugin[bServerSide]'=>serverSideProcessing}
-      describe "with params #{params.inspect}", :js=>true do
-        [:ascending,:descending].each do |sort_order|
-          if sort_order==:ascending
-            first_item,second_item='item1','item2'
-          else
-            first_item,second_item="item#{num_items}","item#{num_items-1}"
-          end
-          it "should be sortable in #{sort_order} order" do
-            load_datatable(params)
-            sort_datatable :column=>'value',:order=>sort_order
-            page.should have_xpath("//td[contains(text(),'#{first_item}')]/following::td[contains(text(),'#{second_item}')]")
-          end
-        end
+    params={:render_method=>render_method}
+
+    #TODO
+    #set a non-default value to make sure url param option are processed correctly
+    #this option will be hard coded for the ajax rendering options in the items index template
+    #params['plugin[iDisplayStart]']=(render_method=='html') ? '20' : ''
+
+
+    describe "with params #{params.inspect}", :js=>true do
+      it "should produce a jQuery Datatable" do
+        load_datatable(params)
+        page.should have_content('Showing 1 to 10 of 50 entries')    
       end
     end
-#    save_and_open_page
   end
 end
