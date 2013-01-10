@@ -1,11 +1,16 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
-require File.expand_path("../../config/environment", __FILE__)
+require File.expand_path("../dummy/config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'factories.rb'
 
+require 'capybara'
+require 'capybara/dsl'
 require 'capybara/rspec'
+require 'database_cleaner'
+require 'selenium-webdriver'
+require 'capybara/rails'
 
 #Capybara.register_driver :selenium_chrome do |app|   
 #  Capybara::Selenium::Driver.new(app, :browser => :chrome)

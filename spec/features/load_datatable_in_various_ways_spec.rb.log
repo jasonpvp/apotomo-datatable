@@ -1,0 +1,52 @@
+Run options: include {:line_numbers=>[24]}
+  1) Rendering an apotomo-datatable widget with params {:render_method=>"html"} should produce a jQuery Datatable
+     Failure/Error: Unable to find matching line from backtrace
+       expected there to be text "Showing 1 to 0 of 50 entries" in "Apotomo Datatable Example Rendered using html Show 10 25 50 100 entries Search: id name value created_at updated_at 1 item1 1 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 2 item2 2 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 3 item3 3 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 4 item4 4 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 5 item5 5 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 6 item6 6 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 7 item7 7 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 8 item8 8 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 9 item9 9 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 10 item10 10 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC Showing 1 to 10 of 50 entries"
+     # spec/features/load_datatable_in_various_ways_spec.rb:24:in `block (4 levels) in <top (required)>'
+  2) Rendering an apotomo-datatable widget with params {:render_method=>"ajax_url_params"} should produce a jQuery Datatable
+     Failure/Error: Unable to find matching line from backtrace
+       expected there to be text "Showing 1 to 0 of 50 entries" in "Apotomo Datatable Example Rendered using ajax_url_params Create table Show 10 25 50 100 entries Search: id name value created_at updated_at 1 item1 1 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 2 item2 2 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 3 item3 3 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 4 item4 4 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 5 item5 5 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 6 item6 6 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 7 item7 7 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 8 item8 8 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 9 item9 9 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 10 item10 10 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC Showing 1 to 10 of 50 entries"
+     # spec/features/load_datatable_in_various_ways_spec.rb:24:in `block (4 levels) in <top (required)>'
+  3) Rendering an apotomo-datatable widget with params {:render_method=>"ajax_js_params"} should produce a jQuery Datatable
+     Failure/Error: Unable to find matching line from backtrace
+       expected there to be text "Showing 1 to 0 of 50 entries" in "Apotomo Datatable Example Rendered using ajax_js_params Create table Show 10 25 50 100 entries Search: id name value created_at updated_at 1 item1 1 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 2 item2 2 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 3 item3 3 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 4 item4 4 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 5 item5 5 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 6 item6 6 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 7 item7 7 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 8 item8 8 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 9 item9 9 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 10 item10 10 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC Showing 1 to 10 of 50 entries"
+     # spec/features/load_datatable_in_various_ways_spec.rb:24:in `block (4 levels) in <top (required)>'
+
+
+Failures:
+
+  1) Rendering an apotomo-datatable widget with params {:render_method=>"html"} should produce a jQuery Datatable
+     Failure/Error: Unable to find matching line from backtrace
+       expected there to be text "Showing 1 to 0 of 50 entries" in "Apotomo Datatable Example Rendered using html Show 10 25 50 100 entries Search: id name value created_at updated_at 1 item1 1 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 2 item2 2 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 3 item3 3 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 4 item4 4 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 5 item5 5 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 6 item6 6 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 7 item7 7 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 8 item8 8 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 9 item9 9 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 10 item10 10 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC Showing 1 to 10 of 50 entries"
+     # spec/features/load_datatable_in_various_ways_spec.rb:24:in `block (4 levels) in <top (required)>'
+
+  2) Rendering an apotomo-datatable widget with params {:render_method=>"ajax_url_params"} should produce a jQuery Datatable
+     Failure/Error: Unable to find matching line from backtrace
+       expected there to be text "Showing 1 to 0 of 50 entries" in "Apotomo Datatable Example Rendered using ajax_url_params Create table Show 10 25 50 100 entries Search: id name value created_at updated_at 1 item1 1 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 2 item2 2 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 3 item3 3 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 4 item4 4 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 5 item5 5 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 6 item6 6 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 7 item7 7 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 8 item8 8 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 9 item9 9 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 10 item10 10 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC Showing 1 to 10 of 50 entries"
+     # spec/features/load_datatable_in_various_ways_spec.rb:24:in `block (4 levels) in <top (required)>'
+
+  3) Rendering an apotomo-datatable widget with params {:render_method=>"ajax_js_params"} should produce a jQuery Datatable
+     Failure/Error: Unable to find matching line from backtrace
+       expected there to be text "Showing 1 to 0 of 50 entries" in "Apotomo Datatable Example Rendered using ajax_js_params Create table Show 10 25 50 100 entries Search: id name value created_at updated_at 1 item1 1 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 2 item2 2 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 3 item3 3 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 4 item4 4 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 5 item5 5 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 6 item6 6 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 7 item7 7 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 8 item8 8 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 9 item9 9 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC 10 item10 10 2013-01-07 04:57:59 UTC 2013-01-07 04:57:59 UTC Showing 1 to 10 of 50 entries"
+     # spec/features/load_datatable_in_various_ways_spec.rb:24:in `block (4 levels) in <top (required)>'
+
+Finished in 21.97 seconds
+3 examples, 3 failures
+
+Failed examples:
+
+rspec spec/features/load_datatable_in_various_ways_spec.rb:22 # Rendering an apotomo-datatable widget with params {:render_method=>"html"} should produce a jQuery Datatable
+rspec spec/features/load_datatable_in_various_ways_spec.rb:22 # Rendering an apotomo-datatable widget with params {:render_method=>"ajax_url_params"} should produce a jQuery Datatable
+rspec spec/features/load_datatable_in_various_ways_spec.rb:22 # Rendering an apotomo-datatable widget with params {:render_method=>"ajax_js_params"} should produce a jQuery Datatable
+
+Randomized with seed 30616
+
+Run options: 
+
+# Running tests:
+
+
+
+Finished tests in 0.013150s, 0.0000 tests/s, 0.0000 assertions/s.
+
+0 tests, 0 assertions, 0 failures, 0 errors, 0 skips
