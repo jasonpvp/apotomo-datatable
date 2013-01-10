@@ -26,7 +26,7 @@ require 'apotomo'
 =end
 
 class Apotomo::DatatableWidget < Apotomo::Widget
-  DEFAULT_VIEW_PATHS=[File.expand_path('../views', __FILE__)]
+  DEFAULT_VIEW_PATHS << File.expand_path('../views', __FILE__)
 
 #  def self.setup_view_paths!
 #    system("echo \"SETUP VIEW PATHS\" >> /var/www-ror/apotomo-datatable-dev/log/development.log")
