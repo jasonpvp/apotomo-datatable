@@ -55,4 +55,5 @@ group :test do
 #  gem 'spork'
 #  gem 'fakeweb'
   gem 'selenium-webdriver'
+#  gem 'webrat'
 end

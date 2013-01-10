@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'datatable_helpers'
 
-describe 'Rendering an apotomo-datatable widget' do
+describe 'Rendering an apotomo-datatable widget', :js=>true do
   include Datatable_helpers
 
   num_items=50
@@ -18,10 +18,10 @@ describe 'Rendering an apotomo-datatable widget' do
     #params['plugin[iDisplayStart]']=(render_method=='html') ? '20' : ''
 
 
-    describe "with params #{params.inspect}", :js=>true do
+    describe "with params #{params.inspect}" do
       it "should produce a jQuery Datatable" do
         load_datatable(params)
-        page.should have_content('Showing 1 to 10 of 50 entries')    
+        page.should have_content("Showing 1 to 10 of #{num_items} entries")    
       end
     end
   end
