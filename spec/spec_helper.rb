@@ -1,6 +1,14 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../dummy/config/environment", __FILE__)
+
+require 'rails'
+#require 'action_pack'
+#require 'action_controller'
+require 'apotomo'
+require 'apotomo-datatable'
+require 'rspec-apotomo'
+
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'factories.rb'

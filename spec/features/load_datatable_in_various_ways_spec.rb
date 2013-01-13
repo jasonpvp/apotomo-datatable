@@ -1,6 +1,8 @@
 require 'spec_helper'
 require 'datatable_helpers'
 
+#This tests validity of the content by processing with javascript
+
 describe 'Rendering an apotomo-datatable widget', :js=>true do
   include Datatable_helpers
 
