@@ -28,18 +28,23 @@ require 'apotomo'
 class Apotomo::DatatableWidget < Apotomo::Widget
   DEFAULT_VIEW_PATHS << File.expand_path('../views', __FILE__)
 
-#  def self.setup_view_paths!
-#    system("echo \"SETUP VIEW PATHS\" >> /var/www-ror/apotomo-datatable-dev/log/development.log")
-#    super setup_view_paths!
-#  end
-
   responds_to_event :data #Used by sAjaxSource plugin option
   responds_to_event :display
   responds_to_event :test_evt, :with => :test_evt, :passing => :root
 
   after_initialize do
     ## set default options and those based on options provided in the has_widgets call in the controller
+    puts "SETTING OPTIONS"
     set_options
+    @test_val=0
+  end
+
+  def test_val
+    @test_val
+  end
+
+  def increment_test_val
+    @test_val=@test_val+1
   end
 
   def test_evt(event)
@@ -165,6 +170,7 @@ class Apotomo::DatatableWidget < Apotomo::Widget
 
 
 =end
+
     controller=parent_controller
     if match=/(\w+?)sController/.match(controller.class.name.to_s)
       controller_model_name=match[1]

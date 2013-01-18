@@ -31,7 +31,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec-instafail'
   s.add_development_dependency 'factory_girl'
   s.add_development_dependency 'shoulda'
-#  s.add_development_dependency 'shoulda-matchers'
   s.add_development_dependency 'capybara','>=2.0.1'
   s.add_development_dependency 'debugger'
   s.add_development_dependency 'launchy'

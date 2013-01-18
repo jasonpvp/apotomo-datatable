@@ -1,3 +1,5 @@
+$run_in_browser=true
+
 require 'spec_helper'
 require 'datatable_helpers'
 

@@ -15,4 +15,13 @@ module Datatable_helpers
       header_div.click  #second click sorts descending
     end
   end
+
+#  def mock_controller!
+require 'apotomo'
+    @controller = Class.new(ActionController::Base) do
+#      def self.default_url_options; {:controller => :barn}; end
+    end.new
+#    @controller.extend ActionController::UrlWriter
+#    @controller.params  = {}
+#  end
 end

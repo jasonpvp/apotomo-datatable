@@ -1,6 +1,8 @@
 #https://gist.github.com/428105 capybara stuff
 #https://gist.github.com/1190475  setup example
 
+$run_in_browser=true
+
 require 'spec_helper'
 
 module Datatable_helpers
