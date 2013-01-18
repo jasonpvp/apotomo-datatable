@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.summary     = "A jQuery Datatable widget built on Apotomo"
   s.description = "#{s.summary}. Render a jQuery datatable for a model/controller using as little as a couple lines of code."
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
+  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
 #  s.files = `git ls-files`.split("\n")
   s.test_files = Dir["spec/*/*"]
 
