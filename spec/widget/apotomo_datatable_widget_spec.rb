@@ -4,11 +4,13 @@ require 'widget_helper'
 describe Apotomo::DatatableWidget, "apotomo-datatable widget" do
 
   before :all do
-    MockModelsController.has_widget_with_params(:widget=>{},:template=>{},:plugin=>{})
-    @controller=MockModelsController.new
-    @controller.request=::ActionController::TestRequest.new
-    @controller.response=::ActionController::TestResponse.new
+    ItemsController.has_widget_with_params(:widget=>{},:template=>{},:plugin=>{})
+    @controller=ItemsController.new
+#    @controller.request=::ActionController::TestRequest.new
+#    @controller.response=::ActionController::TestResponse.new
     @controller.params={}
+    num_items=50
+    (1..num_items).each {|n| FactoryGirl.create(:item)}
   end
 
   before :each do
@@ -22,5 +24,10 @@ describe Apotomo::DatatableWidget, "apotomo-datatable widget" do
 
   it "should increment test_val" do
     lambda{@widget.increment_test_val}.should change(@widget,:test_val).by(1)
+  end
+
+  it "should render data when the :data event is triggered" do
+    @widget.trigger :data
+#    response.should contain('iTotalRecords')
   end
 end

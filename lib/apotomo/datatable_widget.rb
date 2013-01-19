@@ -34,7 +34,6 @@ class Apotomo::DatatableWidget < Apotomo::Widget
 
   after_initialize do
     ## set default options and those based on options provided in the has_widgets call in the controller
-    puts "SETTING OPTIONS"
     set_options
     @test_val=0
   end
@@ -56,7 +55,6 @@ class Apotomo::DatatableWidget < Apotomo::Widget
   def display(options)
     if options && options.respond_to?('each_pair')
       ## merge options provided by the render_widget method call in the view
-      puts "MERGE options into @options"
       @options=@options.deep_merge(options)      
     end
 

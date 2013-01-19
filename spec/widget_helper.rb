@@ -1,4 +1,4 @@
-class MockModelsController < ActionController::Base
+class ItemsController < ApplicationController
   extend Apotomo::Rails::ControllerMethods
 
   #call MockModelsController.has_widget_with_params(:widget=>{...},:template=>{...},:plugin=>{...}) prior to MockModelsController.new
@@ -8,12 +8,12 @@ class MockModelsController < ActionController::Base
     end
   end
 end
-
+=begin
 class MockModel < ActiveRecord::Base
-  attr_accessible :mock_field
+  attr_accessible :name, :value
   def self.column_names
-    {:mock_field=>nil}
+    {:name=>nil, :value=>nil}
   end
 end
-
+=end
 

@@ -6,3 +6,5 @@ FactoryGirl.define do
     sequence(:value) { |n| n }
   end
 end
+
+
