@@ -1,5 +1,12 @@
 class MockModelsController < ActionController::Base
   extend Apotomo::Rails::ControllerMethods
+
+  #call MockModelsController.has_widget_with_params(:widget=>{...},:template=>{...},:plugin=>{...}) prior to MockModelsController.new
+  def self.has_widget_with_params(params={})
+    self.has_widgets do |root|
+      root << items_datatable=widget('apotomo/datatable',:datatable,params)
+    end
+  end
 end
 
 class MockModel < ActiveRecord::Base
@@ -9,10 +16,4 @@ class MockModel < ActiveRecord::Base
   end
 end
 
-MockModelsController.has_widgets do |root|
-  root << items_datatable=widget('apotomo/datatable',:datatable,
-    :widget=>{},
-    :template=>{},
-    :plugin=>{:sAjaxSource=>nil}
-  )
-end
+

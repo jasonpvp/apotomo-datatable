@@ -26,7 +26,7 @@ require 'apotomo'
 =end
 
 class Apotomo::DatatableWidget < Apotomo::Widget
-  DEFAULT_VIEW_PATHS << File.expand_path('../views', __FILE__)
+  DEFAULT_VIEW_PATHS << File.expand_path('../../', __FILE__)
 
   responds_to_event :data #Used by sAjaxSource plugin option
   responds_to_event :display
@@ -56,6 +56,7 @@ class Apotomo::DatatableWidget < Apotomo::Widget
   def display(options)
     if options && options.respond_to?('each_pair')
       ## merge options provided by the render_widget method call in the view
+      puts "MERGE options into @options"
       @options=@options.deep_merge(options)      
     end
 
@@ -79,8 +80,10 @@ class Apotomo::DatatableWidget < Apotomo::Widget
     @evt_test='empty'
     self.fire :test_evt
     if @options[:params][:format]=='js'
-      #TODO: escape double quotes and new lines
-      @html=render_to_string :file => File.expand_path('../datatable/display_html', __FILE__)
+      #TODO: search the app's widget path for this template before using the default version
+      @html=render_to_string :file => File.expand_path('../../apotomo/datatable/display_html', __FILE__)
+      #escape double quotes and new lines, then make string safe so it's rendered properly
+      @html=@html.gsub(/[\n\r]/,' ').gsub(/"/,'\\\\"').html_safe
       render :view=>:display_js
 #      render (replace :view=>:display_html, :selector=>'div#parent')+@init_datatable_js
     else 
@@ -170,6 +173,11 @@ class Apotomo::DatatableWidget < Apotomo::Widget
 
 
 =end
+    #initialize @options, which will contain the final merged hash of options
+    @options={:widget=>{},:template=>{},:plugin=>{}}.with_indifferent_access
+    #make sure options (passed by controller in has_widgets) has the basic hash structure
+    options=options.respond_to?(:each_pair) ? options : {}.with_indifferent_access
+    options=options.deep_merge(@options)
 
     controller=parent_controller
     if match=/(\w+?)sController/.match(controller.class.name.to_s)
