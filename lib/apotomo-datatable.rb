@@ -1,4 +1,4 @@
-require 'apotomo-datatable/datatable_widget'
+require 'apotomo/datatable_widget'
 require 'apotomo-datatable/railtie'
 module ApotomoDatatable
   class Engine < Rails::Engine
