@@ -6,7 +6,7 @@ require File.expand_path("../dummy/config/environment", __FILE__)
 require 'rails'
 #require 'action_pack'
 #require 'action_controller'
-#require 'rspec-apotomo'
+require 'rspec-apotomo'
 require 'shoulda-matchers'
 require 'rspec/rails'
 require 'rspec/autorun'
@@ -24,6 +24,16 @@ if $run_in_browser
   require 'capybara/rspec'
   require 'selenium-webdriver'
   require 'capybara/rails'
+end
+
+if ENV["TRACE"] then
+  #enable full trace
+  set_trace_func proc {
+    |event, file, line, id, binding, classname| 
+    if event == "call" or event == "return" 
+      printf "%8s %s:%-2d %10s %8s\n", event, file, line, id, classname
+    end
+  }
 end
 
 #Capybara.register_driver :selenium_chrome do |app|   
