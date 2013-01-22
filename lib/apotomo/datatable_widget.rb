@@ -59,24 +59,28 @@ class Apotomo::DatatableWidget < Apotomo::Widget
     end
 
     ## merge options from the URL params
-    merge_param_options
+    merge_url_param_options
 
     process_boolean_options
 
-    ## merge client-side plugin options
+    ##Build json string to pass plugin options to the client
+    ##and command to merge with client-side plugin_options if provided
     datatable_options=@options[:plugin].to_json    
     if @options[:template][:plugin_options] 
       datatable_options="$.extend(#{datatable_options},#{@options[:template][:plugin_options]})"
     end
 
-    #make sure :header and :footer are arrayc
+    #make sure :header and :footer are arrays
     if @options[:template][:header] && ! @options[:template][:header].respond_to?('each') then @options[:template][:header]=[@options[:template][:header]] end
-    if @options[:template][:footer] && ! @options[:template][:foote].respond_to?('each') then @options[:template][:footer]=[@options[:template][:footer]] end
+    if @options[:template][:footer] && ! @options[:template][:footer].respond_to?('each') then @options[:template][:footer]=[@options[:template][:footer]] end
 
 
     @init_datatable_js= "$(\"##{@options[:template][:id]}\").dataTable(#{datatable_options});"
+
+    #this is just a test firing an event
     @evt_test='empty'
     self.fire :test_evt
+
     if @options[:params][:format]=='js'
       #TODO: search the app's widget path for this template before using the default version
       @html=render_to_string :file => File.expand_path('../../apotomo/datatable/display_html', __FILE__)
@@ -247,11 +251,8 @@ class Apotomo::DatatableWidget < Apotomo::Widget
     @options[:params]=params
   end
 
-  def merge_param_options
-    #this is insecure since it would allow the client to set options for the 
-    #if params[:widget] && params[:widget].respond_to?('each_pair') 
-    #  @options[:widget]=@options[:widget].deep_merge(params[:widget])
-    #end
+  def merge_url_param_options
+    #:widget options are not accepted from URL parameters - accepting them would be a security hole
     if params[:template] && params[:template].respond_to?('each_pair')
       @options[:template]=@options[:template].deep_merge(params[:template])
     end
@@ -263,6 +264,8 @@ class Apotomo::DatatableWidget < Apotomo::Widget
   def process_boolean_options
     #some options accept boolean options to indicate the default value (true) or undefined (false or nil)
     #these must be processed after options from all sources have been merged
+    #Some true values are converted to default parameters for the plugin
+    #Some false values are deleted from the hash to allow the plugin to apply its own defaults
 
     ## if options[:plugin][:sAjaxSource] is boolean or nil, derive default if true and delete option value from controller
     if @options[:plugin].has_key?(:sAjaxSource) 
