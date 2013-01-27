@@ -13,9 +13,7 @@ describe Apotomo::DatatableWidget, "apotomo-datatable widget" do
   end
 
   describe ":data event" do
-    it "should respond to the triggering of the :data event"
-
-    it "should render data when the :data event is triggered" do
+    it "should render a json string with data when the :data event is triggered" do
       #This triggers the :data event, which queries the database returns a json string of the data
       @test_controller.render_widget(:datatable,:data).should include("\"iTotalRecords\":15")
     end

@@ -54,6 +54,17 @@ describe Apotomo::DatatableWidget, "apotomo-datatable widget" do
     lambda{@widget.increment_test_val}.should change(@widget,:test_val).by(1)
   end
 
+  it "should respond to event triggers" do
+    @test_controller=test_controller()
+    @widget=@test_controller.apotomo_root.childrenHash[:datatable]
+    @widget.instance_eval do
+      def data
+        render text: 'result'
+      end
+    end 
+    @test_controller.render_widget(:datatable,:data).should == 'result'
+  end
+
   it "should raise an exception without a model to use" do
     class OrphanController < MockController
     end
