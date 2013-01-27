@@ -22,6 +22,7 @@ if !Object.const_defined?(:MockController) or !MockController.respond_to?(:has_w
     extend Apotomo::Rails::ControllerMethods
 
     def self.has_widget_with_params(params={})
+      puts "MAKE WIDGET using #{params.inspect}"
       self.has_widgets do |root|
         root << items_datatable=widget('apotomo/datatable',:datatable,params)
       end

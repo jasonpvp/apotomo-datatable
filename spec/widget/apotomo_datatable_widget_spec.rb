@@ -6,7 +6,7 @@ describe Apotomo::DatatableWidget, "apotomo-datatable widget" do
   rspecify(self)
 
   before :all do
-    @controller=test_controller(:widget=>{},:template=>{},:plugin=>{})
+    @controller=test_controller(:widget=>{:name=>'test_datatable_widget'},:template=>{:id=>'test_datatable'},:plugin=>{:iDisplayStart=>10})
     @widget=@controller.apotomo_root.childrenHash[:datatable]
     puts "UID=#{@widget.uid}"
   end
@@ -20,12 +20,17 @@ describe Apotomo::DatatableWidget, "apotomo-datatable widget" do
     @widget.should be_an_instance_of(Apotomo::DatatableWidget)
   end
 
-  it "should respond to method calls" do
-    lambda{@widget.increment_test_val}.should change(@widget,:test_val).by(1)
+  describe "after_initialize with controller_options provided" do
+    it "should merge default options with options passed by the controller into @options" do
+      options=@widget.merged_options
+      options[:widget][:name].should == 'test_datatable_widget'
+      options[:template][:id].should == 'test_datatable'
+      options[:plugin][:iDisplayStart].should == 10
+    end
   end
 
-  describe "after_initialize" do
-    it "should merge default options with options passed by the controller into @options"
+  it "should respond to method calls" do
+    lambda{@widget.increment_test_val}.should change(@widget,:test_val).by(1)
   end
 
 end

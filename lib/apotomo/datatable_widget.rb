@@ -34,7 +34,7 @@ class Apotomo::DatatableWidget < Apotomo::Widget
 
   after_initialize do
     ## set default options and those based on options provided in the has_widgets call in the controller
-    set_options
+    set_options(options)
     @test_val=0
   end
 
@@ -47,41 +47,45 @@ class Apotomo::DatatableWidget < Apotomo::Widget
   end
 
   def test_evt(event)
-    if @options[:widget][:controller].respond_to?(:apotomo_datatable_event)
-      @evt_test=@options[:widget][:controller].apotomo_datatable_event(event)
+    if @merged_options[:widget][:controller].respond_to?(:apotomo_datatable_event)
+      @evt_test=@merged_options[:widget][:controller].apotomo_datatable_event(event)
     end
   end
 
-  def display(options)
-    if options && options.respond_to?('each_pair')
+  def merged_options
+    @merged_options
+  end
+
+  def display(view_options)
+    if view_options && view_options.respond_to?('each_pair')
       ## merge options provided by the render_widget method call in the view
-      @options=@options.deep_merge(options)      
+      @merged_options=@merged_options.deep_merge(view_options)      
     end
 
     ## merge options from the URL params
-    merge_url_param_options
+    merge_url_param_options(params)
 
     process_boolean_options
 
     ##Build json string to pass plugin options to the client
     ##and command to merge with client-side plugin_options if provided
-    datatable_options=@options[:plugin].to_json    
-    if @options[:template][:plugin_options] 
-      datatable_options="$.extend(#{datatable_options},#{@options[:template][:plugin_options]})"
+    datatable_options=@merged_options[:plugin].to_json    
+    if @merged_options[:template][:plugin_options] 
+      datatable_options="$.extend(#{datatable_options},#{@merged_options[:template][:plugin_options]})"
     end
 
     #make sure :header and :footer are arrays
-    if @options[:template][:header] && ! @options[:template][:header].respond_to?('each') then @options[:template][:header]=[@options[:template][:header]] end
-    if @options[:template][:footer] && ! @options[:template][:footer].respond_to?('each') then @options[:template][:footer]=[@options[:template][:footer]] end
+    if @merged_options[:template][:header] && ! @merged_options[:template][:header].respond_to?('each') then @merged_options[:template][:header]=[@merged_options[:template][:header]] end
+    if @merged_options[:template][:footer] && ! @merged_options[:template][:footer].respond_to?('each') then @merged_options[:template][:footer]=[@merged_options[:template][:footer]] end
 
 
-    @init_datatable_js= "$(\"##{@options[:template][:id]}\").dataTable(#{datatable_options});"
+    @init_datatable_js= "$(\"##{@merged_options[:template][:id]}\").dataTable(#{datatable_options});"
 
     #this is just a test firing an event
     @evt_test='empty'
     self.fire :test_evt
 
-    if @options[:params][:format]=='js'
+    if @merged_options[:params][:format]=='js'
       #TODO: search the app's widget path for this template before using the default version
       @html=render_to_string :file => File.expand_path('../../apotomo/datatable/display_html', __FILE__)
       #escape double quotes and new lines, then make string safe so it's rendered properly
@@ -111,8 +115,8 @@ class Apotomo::DatatableWidget < Apotomo::Widget
     is_searching = (params[:sSearch] and params[:sSearch].length>0)
     @records=datasource
     @data={
-      :iTotalRecords=>@options[:widget][:model].count,
-      :iTotalDisplayRecords=>is_searching ? @records.count : @options[:widget][:model].count,
+      :iTotalRecords=>@merged_options[:widget][:model].count,
+      :iTotalDisplayRecords=>is_searching ? @records.count : @merged_options[:widget][:model].count,
       :aaData=>@records
     }
     render text: @data.to_json
@@ -124,16 +128,16 @@ class Apotomo::DatatableWidget < Apotomo::Widget
     filter={}
     is_searching = (params[:sSearch] and params[:sSearch].length>0)
     if is_searching
-      filter[:conditions]=[@options[:widget][:model].column_names.join(' LIKE :sSearch OR ')+' LIKE :sSearch',{:sSearch=>"%#{params[:sSearch]}%"}]
+      filter[:conditions]=[@merged_options[:widget][:model].column_names.join(' LIKE :sSearch OR ')+' LIKE :sSearch',{:sSearch=>"%#{params[:sSearch]}%"}]
     end
     if params[:iDisplayStart] and params[:iDisplayLength]
       filter[:limit]=params[:iDisplayLength]
       filter[:offset]=params[:iDisplayStart]
     end
-    if @options[:widget][:controller].respond_to?('apotomo_datatable_datasource')
-      @records=@options[:widget][:controller].apotomo_datatable_datasource(filter)
+    if @merged_options[:widget][:controller].respond_to?('apotomo_datatable_datasource')
+      @records=@merged_options[:widget][:controller].apotomo_datatable_datasource(filter)
     else
-      @records=@options[:widget][:model].find(:all,filter)
+      @records=@merged_options[:widget][:model].find(:all,filter)
     end
     return @records
   end
@@ -154,12 +158,12 @@ class Apotomo::DatatableWidget < Apotomo::Widget
 
   end
 
-  def set_options
+  def set_options(controller_options)
 =begin
   Options:
 
-  The @options hash includes primary keys for the widget, templates and client-side plugin
-    @options={:widget=>{...}, :template=>{...}, :plugin=>{...}}
+  The @merged_options hash includes primary keys for the widget, templates and client-side plugin
+    @merged_options={:widget=>{...}, :template=>{...}, :plugin=>{...}}
 
   Default options are generated in Apotomo::DatatableWidget.set_options
 
@@ -170,25 +174,25 @@ class Apotomo::DatatableWidget < Apotomo::Widget
   URL parameters may only define template and plugin options. Defining widget options from the URL would present a security hole
   The client-side hash may only define plugin options. Since it is not passed to the server, template and widget options would be irrelevant 
 
-  $.extend(@options[:widget].to_json,client_side_options) constitutes the arguments passed to the datatable initialization function. 
+  $.extend(@merged_options[:widget].to_json,client_side_options) constitutes the arguments passed to the datatable initialization function. 
   See http://datatables.net/usage/options for options.  As such, any option specified in the jquery datatables API may be set in this sub hash
 
 
 =end
-    #initialize @options, which will contain the final merged hash of options
-    @options={:widget=>{},:template=>{},:plugin=>{}}.with_indifferent_access
+    #initialize @merged_options, which will contain the final merged hash of options
+    @merged_options={:widget=>{},:template=>{},:plugin=>{}}.with_indifferent_access
+
     #make sure options (passed by controller in has_widgets) has the basic hash structure
-    options=options.respond_to?(:each_pair) ? options : {}.with_indifferent_access
-    options=options.deep_merge(@options)
+    controller_options=controller_options.respond_to?(:each_pair) ? controller_options : {}.with_indifferent_access.deep_merge(@merged_options)
 
     controller=parent_controller
     if match=/(\w+?)sController/.match(controller.class.name.to_s)
       controller_model_name=match[1]
     end
 
-    if options[:widget][:model]
-      if options[:widget][:model].respond_to?("columns_hash")
-        model=options[:widget][:model]
+    if controller_options[:widget][:model]
+      if controller_options[:widget][:model].respond_to?("columns_hash")
+        model=controller_options[:widget][:model]
       end
     elsif controller_model_name
       #derive the model from the controller name
@@ -198,15 +202,13 @@ class Apotomo::DatatableWidget < Apotomo::Widget
     end
 
 
-    @options[:plugin][:aoColumns]=[]
-    model.column_names.each do |name|
-      @options[:plugin][:aoColumns].push({'mDataProp'=>name})
-    end
 
-    defaults={
+    default_options={
       :widget=>{
+        :name=>"#{model.name}DatatableWidget",
         :model=>model,
-        :controller=>controller
+        :controller=>controller,
+        :datasource=>self.method(:datasource)
       },
       :template=>{
         #The header and footer have the same set of options.
@@ -223,41 +225,28 @@ class Apotomo::DatatableWidget < Apotomo::Widget
 
       },
       :plugin=>{
+        :iDisplayStart=>0,
         :bProcessing=>true,
         :bJQueryUI=>true
       }
     }.with_indifferent_access
-=begin
-    ## if options[:plugin][:sAjaxSource] is boolean or nil, derive default if true and delete option value from controller
-    if !options[:plugin].has_key?(:sAjaxSource) || options[:plugin][:sAjaxSource]==true
-      options[:plugin][:sAjaxSource]=url_for_event(:data)
-      defaults[:plugin][:bServerSide]=true # User server-side processing: http://datatables.net/ref#bServerSide
-    elsif !options[:plugin][:sAjaxSource]
-      options[:plugin].delete(:sAjaxSource) #delete false or nil value to prevent invalid option from passing to plugin
+    default_options[:plugin][:aoColumns]=[]
+    model.column_names.each do |name|
+      default_options[:plugin][:aoColumns].push({'mDataProp'=>name})
     end
-    ## profide column mapping if using ajax or aaData
-    ## provide aaData if requested
-    if options[:plugin][:sAjaxSource] || options[:plugin][:aaData]==true
-      defaults[:plugin][:aoColumns]=aoColumns
-      if options[:plugin][:aaData]==true
-        records=datasource
-        options[:plugin][:aaData]=records
-      end
-    end
-=end
-    @options[:widget][:datasource]=self.method(:datasource)
+
     # merge default options with options provided by the controller
-    @options=defaults.deep_merge(options)
-    @options[:params]=params
+    @merged_options=default_options.deep_merge(controller_options)
+    @merged_options[:params]=params
   end
 
-  def merge_url_param_options
+  def merge_url_param_options(url_param_options)
     #:widget options are not accepted from URL parameters - accepting them would be a security hole
-    if params[:template] && params[:template].respond_to?('each_pair')
-      @options[:template]=@options[:template].deep_merge(params[:template])
+    if url_param_options[:template] && url_param_options[:template].respond_to?('each_pair')
+      @merged_options[:template]=@merged_options[:template].deep_merge(url_param_options[:template])
     end
-    if params[:plugin] && params[:plugin].respond_to?('each_pair')
-      @options[:plugin]=@options[:plugin].deep_merge(params[:plugin])
+    if url_param_options[:plugin] && url_param_options[:plugin].respond_to?('each_pair')
+      @merged_options[:plugin]=@merged_options[:plugin].deep_merge(url_param_options[:plugin])
     end
   end
 
@@ -265,31 +254,31 @@ class Apotomo::DatatableWidget < Apotomo::Widget
     #some options accept boolean options to indicate the default value (true) or undefined (false or nil)
     #these must be processed after options from all sources have been merged
     #Some true values are converted to default parameters for the plugin
-    #Some false values are deleted from the hash to allow the plugin to apply its own defaults
+    #Some false values are deleted from the hash to allow the plugin to apply its own default options
 
     ## if options[:plugin][:sAjaxSource] is boolean or nil, derive default if true and delete option value from controller
-    if @options[:plugin].has_key?(:sAjaxSource) 
-      sAjaxSource_bool=make_bool(@options[:plugin][:sAjaxSource])
+    if @merged_options[:plugin].has_key?(:sAjaxSource) 
+      sAjaxSource_bool=make_bool(@merged_options[:plugin][:sAjaxSource])
       if sAjaxSource_bool
-        @options[:plugin][:sAjaxSource]=url_for_event(:data)
-        unless @options[:plugin].has_key?(:bServerSide) 
-          @options[:plugin][:bServerSide]=true # User server-side processing: http://datatables.net/ref#bServerSide
+        @merged_options[:plugin][:sAjaxSource]=url_for_event(:data)
+        unless @merged_options[:plugin].has_key?(:bServerSide) 
+          @merged_options[:plugin][:bServerSide]=true # User server-side processing: http://datatables.net/ref#bServerSide
         end
       else
-        @options[:plugin].delete(:sAjaxSource) #delete false or nil value to prevent invalid option from passing to plugin
+        @merged_options[:plugin].delete(:sAjaxSource) #delete false or nil value to prevent invalid option from passing to plugin
       end
     end
     ## profide column mapping if using ajax or aaData
     ## provide aaData if requested
-    if sAjaxSource_bool || @options[:plugin][:aaData]==true
-      if @options[:plugin][:aaData]==true
+    if sAjaxSource_bool || @merged_options[:plugin][:aaData]==true
+      if @merged_options[:plugin][:aaData]==true
         records=datasource
-        @options[:plugin][:aaData]=records
+        @merged_options[:plugin][:aaData]=records
       end
     else
-      @options[:plugin].delete(:aoColumns)
+      @merged_options[:plugin].delete(:aoColumns)
     end
-    @options[:plugin][:sAjaxSourceBOOL]=sAjaxSource_bool
+    @merged_options[:plugin][:sAjaxSourceBOOL]=sAjaxSource_bool
   end
 
   def make_bool(val)

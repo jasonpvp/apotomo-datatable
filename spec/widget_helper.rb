@@ -14,8 +14,8 @@ def rspecify(widget_class)
   end
 end
 
-def test_controller(params)
-  puts "LOAD mock_test_controller"
+def test_controller(params={})
+  puts "LOAD mock_test_controller using #{params.inspect}"
   load 'mock_items_controller.rb'
   puts "CALL has_widget_with_params"
   ItemsController.has_widget_with_params(params)
