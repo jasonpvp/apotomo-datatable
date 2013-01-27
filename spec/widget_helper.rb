@@ -6,7 +6,8 @@ require File.expand_path("../mock_items_controller", __FILE__)
 def rspecify(widget_class)
   widget_class.instance_eval do
     include RSpec::Rails::RailsExampleGroup
-    include ActionController::TestCase::Behavior
+# next is probably not needed and breaks things when it's there, but might be needed elsewhere
+#    include ActionController::TestCase::Behavior
     include RSpec::Rails::ViewRendering
     include RSpec::Rails::Matchers::RedirectTo
     include RSpec::Rails::Matchers::RenderTemplate
@@ -20,9 +21,9 @@ def test_controller(params={})
   puts "CALL has_widget_with_params"
   ItemsController.has_widget_with_params(params)
   puts "INSTANCIATE ItemsController"
-  @controller=ItemsController.new
-  @controller.request=::ActionController::TestRequest.new
-  @controller.response=::ActionController::TestResponse.new
-  @controller.params={}
-  return @controller
+  @test_controller=ItemsController.new
+  @test_controller.request=::ActionController::TestRequest.new
+  @test_controller.response=::ActionController::TestResponse.new
+  @test_controller.params={}
+  return @test_controller
 end

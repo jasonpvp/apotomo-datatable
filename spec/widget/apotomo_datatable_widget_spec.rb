@@ -5,13 +5,9 @@ require 'widget_helper'
 describe Apotomo::DatatableWidget, "apotomo-datatable widget" do
   rspecify(self)
 
-  before :all do
-    @controller=test_controller(:widget=>{:name=>'test_datatable_widget'},:template=>{:id=>'test_datatable'},:plugin=>{:iDisplayStart=>10})
-    @widget=@controller.apotomo_root.childrenHash[:datatable]
-    puts "UID=#{@widget.uid}"
-  end
-
   before :each do
+    test_controller(:widget=>{:name=>'test_datatable_widget'},:template=>{:id=>'test_datatable'},:plugin=>{:iDisplayStart=>10})
+    @widget=@test_controller.apotomo_root.childrenHash[:datatable]
     num_items=15
     (1..num_items).each {|n| FactoryGirl.create(:item)}
   end
