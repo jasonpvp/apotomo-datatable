@@ -183,14 +183,16 @@ class Apotomo::DatatableWidget < Apotomo::Widget
     @merged_options={:widget=>{},:template=>{},:plugin=>{}}.with_indifferent_access
 
     #make sure options (passed by controller in has_widgets) has the basic hash structure
-    controller_options=controller_options.respond_to?(:each_pair) ? controller_options : {}.with_indifferent_access.deep_merge(@merged_options)
-
+    controller_options=controller_options.respond_to?(:each_pair) ? controller_options : {}.with_indifferent_access
+    controller_options=@merged_options.deep_merge(controller_options)
     controller=parent_controller
     if match=/(\w+?)sController/.match(controller.class.name.to_s)
       controller_model_name=match[1]
     end
 
-    if controller_options[:widget][:model]
+    #get model first since it is used to build other default options
+    model=nil
+    if controller_options[:widget].has_key?(:model)
       if controller_options[:widget][:model].respond_to?("columns_hash")
         model=controller_options[:widget][:model]
       end
@@ -200,8 +202,9 @@ class Apotomo::DatatableWidget < Apotomo::Widget
         model=eval(controller_model_name)
       end
     end
-
-
+    if model==nil then
+      raise "Cannot use apotomo-datatable without a model. Either pass a model in the has_widgets method call or make sure a model exists with a name corresponding to the controller from which has_widgets is called"
+    end
 
     default_options={
       :widget=>{

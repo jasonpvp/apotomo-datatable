@@ -5,13 +5,9 @@ require 'widget_helper'
 describe Apotomo::DatatableWidget, "apotomo-datatable widget" do
   rspecify(self)
 
-  before :all do
-    @controller=test_controller(:widget=>{},:template=>{},:plugin=>{})
-    @widget=@controller.apotomo_root.childrenHash[:datatable]
-    puts "UID=#{@widget.uid}"
-  end
-
   before :each do
+    @test_controller=test_controller(:widget=>{},:template=>{},:plugin=>{})
+    @widget=@test_controller.apotomo_root.childrenHash[:datatable]
     num_items=15
     (1..num_items).each {|n| FactoryGirl.create(:item)}
   end
@@ -21,7 +17,7 @@ describe Apotomo::DatatableWidget, "apotomo-datatable widget" do
 
     it "should render data when the :data event is triggered" do
       #This triggers the :data event, which queries the database returns a json string of the data
-      @controller.render_widget(:datatable,:data).should include("\"iTotalRecords\":15")
+      @test_controller.render_widget(:datatable,:data).should include("\"iTotalRecords\":15")
     end
   end
 
