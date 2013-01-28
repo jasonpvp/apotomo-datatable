@@ -56,15 +56,14 @@ class Apotomo::DatatableWidget < Apotomo::Widget
     @merged_options
   end
 
-  def display(view_options)
+  def display(view_options={})
     if view_options && view_options.respond_to?('each_pair')
       ## merge options provided by the render_widget method call in the view
-      @merged_options=@merged_options.deep_merge(view_options)      
+      @merged_options.deep_merge!(view_options)      
     end
 
     ## merge options from the URL params
     merge_url_param_options(params)
-
     process_boolean_options
 
     ##Build json string to pass plugin options to the client
@@ -211,7 +210,8 @@ class Apotomo::DatatableWidget < Apotomo::Widget
         :name=>"#{model.name}DatatableWidget",
         :model=>model,
         :controller=>controller,
-        :datasource=>self.method(:datasource)
+        :datasource=>self.method(:datasource),
+        :test_option=>'default'
       },
       :template=>{
         #The header and footer have the same set of options.
@@ -224,13 +224,14 @@ class Apotomo::DatatableWidget < Apotomo::Widget
         #single value or array options are: nil: ommited, label: label, input: input column filter, select: select column filter
         :header=>{:default=>:label,:name=>[:label,:input],:value=>[:label,:input]}, 
         :footer=>nil, 
-        :id=>"#{model.name}Datatable"
-
+        :id=>"#{model.name}Datatable",
+        :test_option=>'default'
       },
       :plugin=>{
         :iDisplayStart=>0,
         :bProcessing=>true,
-        :bJQueryUI=>true
+        :bJQueryUI=>true,
+        :test_option=>'default'
       }
     }.with_indifferent_access
     default_options[:plugin][:aoColumns]=[]
@@ -245,11 +246,11 @@ class Apotomo::DatatableWidget < Apotomo::Widget
 
   def merge_url_param_options(url_param_options)
     #:widget options are not accepted from URL parameters - accepting them would be a security hole
-    if url_param_options[:template] && url_param_options[:template].respond_to?('each_pair')
-      @merged_options[:template]=@merged_options[:template].deep_merge(url_param_options[:template])
+    if url_param_options.has_key?(:template) && url_param_options[:template].respond_to?('each_pair')
+      @merged_options[:template].deep_merge!(url_param_options[:template])
     end
-    if url_param_options[:plugin] && url_param_options[:plugin].respond_to?('each_pair')
-      @merged_options[:plugin]=@merged_options[:plugin].deep_merge(url_param_options[:plugin])
+    if url_param_options.has_key?(:plugin) && url_param_options[:plugin].respond_to?('each_pair')
+      @merged_options[:plugin].deep_merge!(url_param_options[:plugin])
     end
   end
 
