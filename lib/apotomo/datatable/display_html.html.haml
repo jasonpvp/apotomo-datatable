@@ -1,22 +1,24 @@
 /default apotomo-datatable view
--if @options[:widget][:model]
-  %table{:id=>@options[:template][:id],:class=>"display dataTable"}<>
-    -if @options[:template][:header]
+-if @merged_options[:widget][:model]
+  %table{:id=>@merged_options[:template][:id],:class=>"display dataTable"}<>
+    -if @merged_options[:template][:header]
       %thead<>
-        =render({:state=>:head_foot},@options,:header);
+        =render({:state=>:head_foot},@merged_options,:header);
     %tbody<>
-      -if !@options[:plugin][:sAjaxSource] and !@options[:plugin][:aaData]
-        -@options[:widget][:datasource].call().each do |item|
+      -if !@merged_options[:plugin][:sAjaxSource] and !@merged_options[:plugin][:aaData]
+        -@merged_options[:widget][:datasource].call().each do |item|
           %tr<>
             -item.attributes.each do |key,value|
               %td<>=value
-    -if @options[:template][:footer]
+    -if @merged_options[:template][:footer]
       %tfoot<>
-        =render({:state=>:head_foot},@options,:footer);
-
-  -if !@options[:params][:format]
+        =render({:state=>:head_foot},@merged_options,:footer);
+  -if !@merged_options[:params][:format]
     :javascript
       postInit(function() {
         #{@init_datatable_js}
       });
-    -"#{@options[:plugin].inspect}"
+    -"#{@merged_options[:plugin].inspect}"
+-else
+  ="No Model Defined"
+

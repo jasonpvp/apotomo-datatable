@@ -25,6 +25,10 @@ describe Apotomo::DatatableWidget, "apotomo-datatable widget" do
       @widget=@test_controller.apotomo_root.childrenHash[:datatable]
     end
 
+    it "should be using the default model" do
+      @widget.merged_options[:widget][:model].should == Item
+    end
+
     it "should merge default options with options passed by the controller into @options" do
       options=@widget.merged_options
       options[:widget][:name].should == 'ItemDatatableWidget'

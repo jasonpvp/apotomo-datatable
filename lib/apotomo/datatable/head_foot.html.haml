@@ -1,12 +1,12 @@
 %tr<>
-  -options[:widget][:model].columns_hash.each_pair do |name,column|
+  -merged_options[:widget][:model].columns_hash.each_pair do |name,column|
     %th<>
-      - if options[:template][section].respond_to?(:each_pair)
-        - inputs=options[:template][section][name]
+      - if merged_options[:template][section].respond_to?(:each_pair)
+        - inputs=merged_options[:template][section][name]
         - unless inputs
-          - inputs=options[:template][section][:default]
+          - inputs=merged_options[:template][section][:default]
       - else
-        - inputs=options[:template][section]
+        - inputs=merged_options[:template][section]
       - unless inputs.respond_to?(:each)
         - inputs=[inputs]
       - inputs.each do |opt|

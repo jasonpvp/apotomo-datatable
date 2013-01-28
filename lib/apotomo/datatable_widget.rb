@@ -83,7 +83,6 @@ class Apotomo::DatatableWidget < Apotomo::Widget
     #this is just a test firing an event
     @evt_test='empty'
     self.fire :test_evt
-
     if @merged_options[:params][:format]=='js'
       #TODO: search the app's widget path for this template before using the default version
       @html=render_to_string :file => File.expand_path('../../apotomo/datatable/display_html', __FILE__)
@@ -106,8 +105,8 @@ class Apotomo::DatatableWidget < Apotomo::Widget
   def datatable_init_vars
   end
 
-  def head_foot(options,section)
-    render :locals=>{:options=>options,:section=>section}
+  def head_foot(merged_options,section)
+    render :locals=>{:merged_options=>merged_options,:section=>section}
   end
 
   def data
