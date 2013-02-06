@@ -16,20 +16,20 @@
 ### Simple use case for a given model/controller
 
 #### items_controller.rb
-  has_widgets do |root|
-    root << datatable=widget('apotomo/datatable',:datatable)
-  end
+    has_widgets do |root|
+      root << datatable=widget('apotomo/datatable',:datatable)
+    end
 
 #### Embedding with an HTML view
 ##### view/items/index.html.haml
-  =render_widget :datatable,:display
+    =render_widget :datatable,:display
 
 #### AJAX rendering
 ##### view/items/index.html.haml
-  %div#parentDiv
-    =link_to "Create table", items_path+'.js?template[parent]=parentDiv', :remote=>true, :title=>"Create table"
+    %div#parentDiv
+      =link_to "Create table", items_path+'.js?template[parent]=parentDiv', :remote=>true, :title=>"Create table"
 ##### view/items/index.js.haml
-  =render_widget :datatable,:display
+    =render_widget :datatable,:display
 
 ### Passing options from various points
 
