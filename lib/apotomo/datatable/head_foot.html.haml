@@ -1,21 +1,22 @@
 %tr<>
   -merged_options[:widget][:model].columns_hash.each_pair do |name,column|
-    %th<>
-      - if merged_options[:template][section].respond_to?(:each_pair)
-        - inputs=merged_options[:template][section][name]
-        - unless inputs
-          - inputs=merged_options[:template][section][:default]
-      - else
-        - inputs=merged_options[:template][section]
-      - unless inputs.respond_to?(:each)
-        - inputs=[inputs]
-      - inputs.each do |opt|
-        - case opt
-        - when :label
-          =name
-        - when :input
-          %br<>
-          %input{:onclick=>"event.stopPropagation();"}<>
-        - when :select
-          %br<>
-          %select{:onclick=>"event.stopPropagation();"}<>
+    -if !@merged_options[:template][:excluded_columns].include?(name.to_sym) or @merged_options[:template][:included_columns].include?(name.to_sym)
+      %th<>
+        - if merged_options[:template][section].respond_to?(:each_pair) 
+          - inputs=merged_options[:template][section][name]
+          - unless inputs
+            - inputs=merged_options[:template][section][:default]
+        - else
+          - inputs=merged_options[:template][section]
+        - unless inputs.respond_to?(:each)
+          - inputs=[inputs]
+        - inputs.each do |opt|
+          - case opt
+          - when :label
+            =name
+          - when :input
+            %br<>
+            %input{:onclick=>"event.stopPropagation();"}<>
+          - when :select
+            %br<>
+            %select{:onclick=>"event.stopPropagation();"}<>

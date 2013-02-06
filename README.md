@@ -1,27 +1,43 @@
 # Apotomo-Datatable
-  (Soon to be) a Rails Gem for generating jQuery Datatables with extremely minimal configuration
+  Rails Gem for generating jQuery Datatables with extremely minimal configuration
 
   Built on the Apotomo widget gem
 
-  Currently includes jQuery Datatables version 1.9.4
+  Pacaged with jQuery Datatables version 1.9.4
 
   Datatables may be rendered within a view (like a partial) or as javascipt for AJAX implementation
 
 ## Usage
-  (Once it is gem-ified. In its current, early development state, this repository includes a complete rails app with apotomo-datatable installed under app/widgets)
-
-  The following exmaple demonstrates creating a datatable as a rendered widget (apotomo cell partial)
-  from within a view, and using AJAX with two different methods for passing plugin options.
 
 ### Gemfile
     gem 'apotomo-datatable'
     gem 'haml'
 
-### items_controller.rb
-    root << items_datatable=widget('apotomo/datatable',:items_datatable,
+### Simple use case for a given model/controller
+
+#### items_controller.rb
+  has_widgets do |root|
+    root << datatable=widget('apotomo/datatable',:datatable)
+  end
+
+#### Embedding with an HTML view
+##### view/items/index.html.haml
+  =render_widget :datatable,:display
+
+#### AJAX rendering
+##### view/items/index.html.haml
+  %div#parentDiv
+    =link_to "Create table", items_path+'.js?template[parent]=parentDiv', :remote=>true, :title=>"Create table"
+##### view/items/index.js.haml
+  =render_widget :datatable,:display
+
+### Passing options from various points
+
+#### items_controller.rb
+    root << datatable=widget('apotomo/datatable',:datatable,
       :widget=>{},   #widget options (the model is derived from the controller name by default, but may be passed here as :model=>Model)
       :template=>{:footer=>true}, #template options
-      :plugin=>{:sScrollY=>150}    #plugin options
+      :plugin=>{:sScrollY=>150}    #plugin options, see: http://datatables.net/usage/options
     )
 
     def index
@@ -33,12 +49,13 @@
 
     # By defaultathe widget will query the model on its own
     # If apotomo_datatable_datasource is defined, Apotomo::DatatableWidget.datasource will use this to populate
-    # its data collection results returned from here are encapsulated in a hash expected by jquery datatables
+    # The hash provided, which is expected to be standard search results from an ActiveRecord query, is encapsulated in a hash expected by jquery datatables
+
     def apotomo_datatable_datasource(filter)
       Item.find(:all,filter)
     end
 
-### index.html.haml
+#### view/items/index.html.haml
     %h1="Apotomo Datatable Example"
 
     %h2="Rendered as HTML"
@@ -56,7 +73,7 @@
     %div#parentDiv2
       =link_to "Create table from options defined in javascript variable", items_path+'.js?template[plugin_options]=plugin_options&template[parent]=parentDiv2&template[id]=datatable_2', :remote=>true
 
-### index.js.haml
+#### index.js.haml
     =render_widget :items_datatable,:display,:widget=>{},:template=>{:footer=>true},:plugin=>{:sScrollY=>150}
 
 
@@ -76,10 +93,15 @@
 
   $.extend(@options[:widget].to_json,client_side_options) constitutes the arguments passed to the datatable initialization function. 
   See http://datatables.net/usage/options for options.  As such, any option specified in the jquery datatables API may be set in this sub hash
+  Note: Server-side processing is not yet supported
+
+  By default, :id, :created_at and :updated_at columns are excluded from display. 
+  Pass the [:template][:excluded_columns] option to exclude more
+  Pass the [:template][:included_columns] option to include excluded columns
 
 ## Current Status
 
-  The above examples will load a functional datatable, with sorting and global filtering working when plugin[bServerSide]!=true
+  The above examples will load a functional datatable, with sorting and global filtering working
   Basic tests for loading and sorting are implemented.  Sorting tests fail when plugin[bServerSide]=true since that is not implemented yet
   Template for column-based filters started, but not yet complete or functional
 

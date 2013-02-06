@@ -221,9 +221,12 @@ class Apotomo::DatatableWidget < Apotomo::Widget
         #If a single value or array, all columns are rendered with the provided options in order
         #If a hash, each key should match column field names. Each key-value is a value or array as above
         #single value or array options are: nil: ommited, label: label, input: input column filter, select: select column filter
-        :header=>{:default=>:label,:name=>[:label,:input],:value=>[:label,:input]}, 
+#        :header=>{:default=>:label,:name=>[:label,:input],:value=>[:label,:input]}, 
+        :header=>{:default=>:label}, 
         :footer=>nil, 
         :id=>"#{model.name}Datatable",
+        :excluded_columns=>[:id,:created_at,:updated_at], #set to a list of field names to exclude from display
+        :included_columns=>[], #set to a list of columns to include even if they are excluded in :excluded_columns
         :test_option=>'default'
       },
       :plugin=>{

@@ -9,7 +9,8 @@
         -@merged_options[:widget][:datasource].call().each do |item|
           %tr<>
             -item.attributes.each do |key,value|
-              %td<>=value
+              -if !@merged_options[:template][:excluded_columns].include?(key.to_sym) or @merged_options[:template][:included_columns].include?(key.to_sym)
+                %td<>=value
     -if @merged_options[:template][:footer]
       %tfoot<>
         =render({:state=>:head_foot},@merged_options,:footer);
