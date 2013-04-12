@@ -13,7 +13,12 @@
     gem 'apotomo-datatable'
     gem 'haml'
 
+#### application.js
+    //= apotomo-datatable
+    //= jquery.dataTable
+ 
 ### Simple use case for a given model/controller
+
 
 #### items_controller.rb
     has_widgets do |root|
